@@ -149,7 +149,7 @@ def open_in_tmux(session, path):
 
 
 def create_project(name: str, languages: dict):
-    base = "~/Desktop/42"
+    base = "~/Desktop/Projects"
     path = Path(base).expanduser() / name
     path.mkdir(parents=True, exist_ok=True)
     file = path / "README.md"
@@ -280,25 +280,28 @@ def main():
         
         # Create a new project
         elif choice == "3":
-            name = input("What should we name this project ? ")
+            name = input("What should we name this project ? (leave empty to cancel)")
+            cancel = 0;
             while exists(name) or name == "":
                 print("")
                 if exists(name):
                     name = input("Project " + name + " already exists. Please give it another name : ")
                 else:
-                    name = input("Project name can't be empty. Please give it another name : ")
-            languages = []
-            #lang = input("What languages will the project use ? (can set multiple ones, leave empty to finish) ")
-            #while (lang != ""):
-                #languages.append(lang.capitalize())
+                    cancel = 1;
+                    break
+            if cancel == 0:
+                languages = []
                 #lang = input("What languages will the project use ? (can set multiple ones, leave empty to finish) ")
-            create_project(name, languages)
-            questionOpen = input("Project created. Should we open it ? (Y/n) ")
-            if (questionOpen.lower() == "y"):
-                open_project(name)
-                switch_last(name)
-            if (questionOpen.lower() == "n"):
-                show_options()
+                #while (lang != ""):
+                    #languages.append(lang.capitalize())
+                    #lang = input("What languages will the project use ? (can set multiple ones, leave empty to finish) ")
+                create_project(name, languages)
+                questionOpen = input("Project created. Should we open it ? (Y/n) ")
+                if (questionOpen.lower() == "y"):
+                    open_project(name)
+                    switch_last(name)
+                if (questionOpen.lower() == "n"):
+                    show_options()
         
         # Import an existing project
         elif choice == "4":
@@ -316,6 +319,7 @@ def main():
             show_banner()
             empt = 0
             if is_empty():
+                print()
                 print("You have no projects.")
                 wait_for_key()
                 empt = 1
