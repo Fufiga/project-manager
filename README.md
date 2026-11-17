@@ -4,7 +4,14 @@ A small terminal tool to keep track of your projects and open any of them in one
 
 Pure Python (standard library only), nothing to `pip install`.
 
----
+# AS OF NOW
+
+The program works. But lacks some features that will come soon.
+
+Note: Currently, projects are stored in `~/Desktop/Projects/`
+You can still import your own projects by giving the path of the folder.
+
+Configuration capabilities will come soon.
 
 ## How it works
 
