@@ -1,27 +1,29 @@
 # Project Manager
 
-A small terminal tool to keep track of your projects and open any of them in one keystroke. Each project opens in its own **tmux** session: nvim on the left, a shell in the project folder on the right.
+![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=flat-square&logo=python&logoColor=white)
+![Dependencies](https://img.shields.io/badge/Dependencies-Zero_(Stdlib_only)-brightgreen?style=flat-square)
+![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS-lightgrey?style=flat-square&logo=linux&logoColor=white)
 
-Pure Python (standard library only), nothing to `pip install`.
+A lightweight terminal tool to keep track of your projects and jump into any workspace in a single keystroke. Each project launches in its own dedicated **tmux** session: **Neovim** on the left, and a ready-to-use shell on the right.
 
-# AS OF NOW
+Built with **pure Python** (standard library only) — zero `pip install` required.
 
-The program works. But lacks some features that will come soon.
+> [!NOTE]
+> **Status (`v0.1.0`):** Functional early release. Projects are currently stored in `~/Desktop/Projects/` by default (you can still import existing folders from anywhere on your system). Custom configuration file support is planned for upcoming releases.
 
-Note: Currently, projects are stored in `~/Desktop/Projects/`
-You can still import your own projects by giving the path of the folder.
+---
 
-Configuration capabilities will come soon.
+## ✨ How It Works
 
-## How it works
+* **Automatic Workspace Layout:** Opening a project creates a named `tmux` session rooted in the project directory, running `nvim` on the left pane (70%) and a plain shell on the right pane (30%). If the session already exists, it seamlessly reattaches.
+* **Session Persistence:** Detaching from `tmux` (`Ctrl+b` then `d`) drops you right back into the manager menu.
+* **Quick Resume:** Remembers your last active project so you can pick up where you left off immediately.
+* **Instant Scaffolding:** Creating a new project automatically initializes a directory in `~/Desktop/Projects/`, a `README.md`, and a fresh `git` repository.
+* **Local Metadata:** Project names, paths, and languages are stored cleanly in `data.json`.
 
-- Projects (name, folder, languages) are stored in `data.json`.
-- Opening a project creates a tmux session named after it, starting in the project folder. The left pane runs `nvim`, the right pane (30% width) is a plain shell. If the session already exists, it just reattaches.
-- When you detach from tmux (`Ctrl+b` then `d`), you come back to the menu.
-- The project you opened last is remembered, so it can be resumed from the menu.
-- New projects get a folder in `~/Desktop/42`, a `README.md` and a git repository.
+### Menu Overview
 
-```
+```text
 1. Resume last project
 2. Load a project
 3. New project
@@ -31,28 +33,43 @@ Configuration capabilities will come soon.
 7. Quit
 ```
 
-## Requirements
+---
 
-- Linux
-- Python 3.9 or newer
-- `tmux`
-- `git`
-- `nvim`
+## 📋 Requirements
 
-## Usage
+* **OS:** Linux or macOS
+* **Runtime:** Python `3.9` or newer
+* **Tools:** `tmux`, `git`, and `nvim` installed and available in your `$PATH`
+
+### Installing Dependencies on macOS
+
+If you are on macOS, you can install all required tools at once using [Homebrew](https://brew.sh/):
+
+```bash
+brew install python tmux neovim git
+```
+
+---
+
+## 🚀 Quick Start
 
 ```bash
 mkdir -p ~/Desktop/Projects/project-manager
-git clone git@github.com:Fufiga/gabsec-projectManager.git ~/Desktop/Projects/project-manager
+git clone https://github.com/Fufiga/project-manager.git ~/Desktop/Projects/project-manager
 cd ~/Desktop/Projects/project-manager
 python3 main.py
 ```
 
-## Launching it from `.zshrc`
+---
 
-Add one block at the end of `~/.zshrc` and adjust the path. All of them skip tmux panes (otherwise every pane would start the manager again) and use `cd` in a subshell so `data.json` is always found. Use `python3`, not `exec python3`, so quitting the manager gives you your normal prompt.
+## ⚡ Auto-Launch from `.zshrc`
 
-Any terminal:
+You can trigger Project Manager automatically whenever you open a new terminal window. Add one of the blocks below to the end of your `~/.zshrc` (adjusting the path if needed).
+
+> [!TIP]
+> The `-z "$TMUX"` check ensures the manager doesn't recursively launch inside every new `tmux` pane, while the `(cd ...)` subshell guarantees `data.json` is always found. Use `python3` (not `exec python3`) so quitting the manager drops you back into your normal shell prompt.
+
+### Option A: Any Terminal
 
 ```zsh
 if [[ -o interactive && -z "$TMUX" ]]; then
@@ -60,17 +77,21 @@ if [[ -o interactive && -z "$TMUX" ]]; then
 fi
 ```
 
-For a specific terminal, replace the first condition with one of these:
+### Option B: Specific Terminal Emulator
 
-| Terminal | Condition |
-|---|---|
-| WezTerm | `[[ "$TERM_PROGRAM" == "WezTerm" && -z "$TMUX" ]]` |
-| kitty | `[[ -n "$KITTY_WINDOW_ID" && -z "$TMUX" ]]` |
-| Alacritty | `[[ -n "$ALACRITTY_SOCKET" && -z "$TMUX" ]]` |
-| GNOME Terminal | `[[ -n "$VTE_VERSION" && -z "$TMUX" ]]` |
-| Konsole | `[[ -n "$KONSOLE_VERSION" && -z "$TMUX" ]]` |
+Replace the `if` condition above with the one matching your terminal:
 
-Example for WezTerm:
+| Terminal | Platform | Condition |
+| :--- | :--- | :--- |
+| **WezTerm** | Linux / macOS | `[[ "$TERM_PROGRAM" == "WezTerm" && -z "$TMUX" ]]` |
+| **Kitty** | Linux / macOS | `[[ -n "$KITTY_WINDOW_ID" && -z "$TMUX" ]]` |
+| **Alacritty** | Linux / macOS | `[[ -n "$ALACRITTY_SOCKET" && -z "$TMUX" ]]` |
+| **Apple Terminal** | macOS | `[[ "$TERM_PROGRAM" == "Apple_Terminal" && -z "$TMUX" ]]` |
+| **iTerm2** | macOS | `[[ "$TERM_PROGRAM" == "iTerm.app" && -z "$TMUX" ]]` |
+| **GNOME Terminal** | Linux | `[[ -n "$VTE_VERSION" && -z "$TMUX" ]]` |
+| **Konsole** | Linux | `[[ -n "$KONSOLE_VERSION" && -z "$TMUX" ]]` |
+
+**Example for WezTerm:**
 
 ```zsh
 if [[ "$TERM_PROGRAM" == "WezTerm" && -z "$TMUX" ]]; then
@@ -78,14 +99,17 @@ if [[ "$TERM_PROGRAM" == "WezTerm" && -z "$TMUX" ]]; then
 fi
 ```
 
-Notes:
+**Good to know:**
+* Reload your config with `source ~/.zshrc` (or open a new terminal) after editing.
+* Keep `==` outside the quotes, and spell `TERM_PROGRAM` with a single `M`.
+* To inspect the environment variables set by your terminal, run: `env | grep -i -E "kitty|alacritty|wezterm|konsole|vte|term_program"`.
 
-- Open a new terminal or run `source ~/.zshrc` after editing.
-- Keep `==` outside the quotes, and write `TERM_PROGRAM` with one M.
-- To find the variables your terminal sets: `env | grep -i -E "kitty|alacritty|wezterm|konsole|vte"`.
+---
 
-## Troubleshooting
+## 🛠️ Troubleshooting
 
-- **tmux opens in `~`**: the folder doesn't exist, or you reattached to an old session. Run `tmux ls`, then `tmux kill-session -t <name>`.
-- **Terminal looks broken after a crash**: type `reset`.
-- **Several `data.json` files appear**: start the program from its own folder, as in the `.zshrc` examples.
+| Symptom | Cause & Fix |
+| :--- | :--- |
+| **`tmux` opens in `~`** | The target folder doesn't exist, or you reattached to a stale session. List active sessions with `tmux ls` and remove the old one via `tmux kill-session -t <name>`. |
+| **Garbled terminal after a crash** | Run `reset` in your terminal to restore normal display settings. |
+| **Duplicate `data.json` files appear** | Always launch the script from its own directory (using the `(cd ...)` subshell pattern shown in the `.zshrc` setup). |
