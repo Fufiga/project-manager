@@ -87,11 +87,16 @@ def remove_project(name):
 
     if also_folder:
         folder = Path(p.path).expanduser().resolve()
-        base = Path("~/Desktop/42").expanduser().resolve()
-        if folder.is_dir() and folder.is_relative_to(base) and folder != base:
+        home = Path.home().resolve()
+        forbidden = {Path("/"), home, home / "Desktop"}
+
+        if folder.is_dir() and folder not in forbidden and folder.is_relative_to(home):
             shutil.rmtree(folder)
+            print(f"Folder '{folder}' deleted.")
+            sleep(2)
         else:
-            print("Folder is outside ~/Desktop/42, not deleting it.")
+            print(f"Refused to delete '{folder}' (not found or unsafe path).")
+            sleep(4)
 
     delete_project(p.name)
     print("Project deleted.")
@@ -280,7 +285,7 @@ def main():
         
         # Create a new project
         elif choice == "3":
-            name = input("What should we name this project ? (leave empty to cancel)")
+            name = input("What should we name this project ? (leave empty to cancel) ")
             cancel = 0;
             while exists(name) or name == "":
                 print("")
