@@ -96,7 +96,7 @@ Replace the `if` condition above with the one matching your terminal:
 
 ```zsh
 if [[ "$TERM_PROGRAM" == "WezTerm" && -z "$TMUX" ]]; then
-    (cd ~/Desktop/Projects/project-manager && python3 main.py)
+    (python3 main.py)
 fi
 ```
 
