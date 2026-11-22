@@ -266,7 +266,7 @@ def main():
                 if (show.lower() == "y"):
                     show_infos()
                 while True:
-                    to_load = input("Which one do you want to load ? ")
+                    to_load = input("Which one do you want to load ? (leave empty to cancel) ")
                     if to_load.isdigit() and exists_id(int(to_load)):
                         project = retrieve_projectId(int(to_load))
                         switch_last(project.name)
@@ -279,6 +279,11 @@ def main():
                         break
                     elif to_load == "s":
                         show_infos()
+                    elif to_load == "":
+                        print()
+                        print("Load cancelled..")
+                        sleep(2)
+                        break
                     else:
                         print("No projects has this id or name. Please try again. (press s to show the projects list)")
                         sleep(1)
