@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-22
+
 ### Added
 - Update checker: the application now detects when a newer release tag is available
   and offers to update (y/n). The check runs in the background (at most once every
