@@ -73,7 +73,7 @@ You can trigger Project Manager automatically whenever you open a new terminal w
 
 ```zsh
 if [[ -o interactive && -z "$TMUX" ]]; then
-    (cd ~/Desktop/Projects/project-manager && python3 main.py)
+    (python3 main.py)
 fi
 ```
 
