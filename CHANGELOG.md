@@ -18,4 +18,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the project folder should also be deleted, then confirm by typing the full project name.
 
 ### Fixed
+- Data.json: changed creation of data.json file, now puts file in the correct root folder. Before: made a file where user ran the program.
 - README: removed `cd` from the terminal `if` block in the `.zshrc` example.
