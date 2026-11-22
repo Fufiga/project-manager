@@ -1,5 +1,6 @@
 # Project Manager
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 ![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=flat-square&logo=python&logoColor=white)
 ![Dependencies](https://img.shields.io/badge/Dependencies-Zero_(Stdlib_only)-brightgreen?style=flat-square)
 ![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS-lightgrey?style=flat-square&logo=linux&logoColor=white)
@@ -73,7 +74,7 @@ You can trigger Project Manager automatically whenever you open a new terminal w
 
 ```zsh
 if [[ -o interactive && -z "$TMUX" ]]; then
-    (cd ~/Desktop/Projects/project-manager && python3 main.py)
+    (python3 main.py)
 fi
 ```
 
@@ -113,3 +114,7 @@ fi
 | **`tmux` opens in `~`** | The target folder doesn't exist, or you reattached to a stale session. List active sessions with `tmux ls` and remove the old one via `tmux kill-session -t <name>`. |
 | **Garbled terminal after a crash** | Run `reset` in your terminal to restore normal display settings. |
 | **Duplicate `data.json` files appear** | Always launch the script from its own directory (using the `(cd ...)` subshell pattern shown in the `.zshrc` setup). |
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

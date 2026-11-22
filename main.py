@@ -8,7 +8,7 @@ import termios
 import tty
 import shutil
 import random
-
+from updater import start_background_check, prompt_for_update
 
 GREEN = "\033[32m"
 YELLOW = "\033[33m"
@@ -71,6 +71,11 @@ def remove_project(name):
         print(f"Project '{name}' not found. ")
         return
 
+    also_folder = input("Also delete the folder and its files? (Y/n) ").lower() == "y"
+
+    # Stop its tmux session first (silent if it doesn't exist)
+    subprocess.run(["tmux", "kill-session", "-t", f"={p.name}"], capture_output=True)
+
     # Typing the name is harder to do by accident than Y/n
     confirm = input(f"Type '{p.name}' to confirm deletion (anything else to cancel): ")
     if confirm != p.name:
@@ -79,11 +84,6 @@ def remove_project(name):
         print("Cancelled.")
         wait_for_key()
         return
-
-    also_folder = input("Also delete the folder and its files? (Y/n) ").lower() == "y"
-
-    # Stop its tmux session first (silent if it doesn't exist)
-    subprocess.run(["tmux", "kill-session", "-t", f"={p.name}"], capture_output=True)
 
     if also_folder:
         folder = Path(p.path).expanduser().resolve()
@@ -266,7 +266,7 @@ def main():
                 if (show.lower() == "y"):
                     show_infos()
                 while True:
-                    to_load = input("Which one do you want to load ? ")
+                    to_load = input("Which one do you want to load ? (leave empty to cancel) ")
                     if to_load.isdigit() and exists_id(int(to_load)):
                         project = retrieve_projectId(int(to_load))
                         switch_last(project.name)
@@ -279,6 +279,11 @@ def main():
                         break
                     elif to_load == "s":
                         show_infos()
+                    elif to_load == "":
+                        print()
+                        print("Load cancelled..")
+                        sleep(2)
+                        break
                     else:
                         print("No projects has this id or name. Please try again. (press s to show the projects list)")
                         sleep(1)
@@ -373,4 +378,6 @@ def main():
 
 
 if __name__ == "__main__":
+    prompt_for_update()
+    start_background_check()
     main()

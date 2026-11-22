@@ -12,8 +12,8 @@ GOLD = "\033[38;5;220m"
 ORANGE = "\033[38;5;208m"
 RESET = "\033[0m"
 
-
-FILE = Path("data.json")
+ROOT_FOLDER = Path(__file__).resolve().parent
+FILE = ROOT_FOLDER / "data.json"
 
 
 @dataclass
