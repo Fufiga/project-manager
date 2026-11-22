@@ -71,6 +71,11 @@ def remove_project(name):
         print(f"Project '{name}' not found. ")
         return
 
+    also_folder = input("Also delete the folder and its files? (Y/n) ").lower() == "y"
+
+    # Stop its tmux session first (silent if it doesn't exist)
+    subprocess.run(["tmux", "kill-session", "-t", f"={p.name}"], capture_output=True)
+
     # Typing the name is harder to do by accident than Y/n
     confirm = input(f"Type '{p.name}' to confirm deletion (anything else to cancel): ")
     if confirm != p.name:
@@ -79,11 +84,6 @@ def remove_project(name):
         print("Cancelled.")
         wait_for_key()
         return
-
-    also_folder = input("Also delete the folder and its files? (Y/n) ").lower() == "y"
-
-    # Stop its tmux session first (silent if it doesn't exist)
-    subprocess.run(["tmux", "kill-session", "-t", f"={p.name}"], capture_output=True)
 
     if also_folder:
         folder = Path(p.path).expanduser().resolve()
