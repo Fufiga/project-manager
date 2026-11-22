@@ -8,7 +8,7 @@ import termios
 import tty
 import shutil
 import random
-
+from updater import start_background_check, prompt_for_update
 
 GREEN = "\033[32m"
 YELLOW = "\033[33m"
@@ -373,4 +373,6 @@ def main():
 
 
 if __name__ == "__main__":
+    prompt_for_update()
+    start_background_check()
     main()
